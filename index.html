@@ -111,9 +111,7 @@ button:active{
     font-size:28px;
 }
 
-/* =====================================================
-   🔥 TIMER FULLSCREEN REAL (FIX IPHONE)
-===================================================== */
+/* ===== TIMER FULLSCREEN ===== */
 
 #pantallaTimer{
     position:fixed;
@@ -166,6 +164,31 @@ button:active{
 @keyframes pulse{
     0%,100%{transform:scale(1)}
     50%{transform:scale(1.12)}
+}
+
+/* ===== MENSAJE AMBAR ===== */
+
+#mensajeAmor{
+    font-weight:900;
+    font-size:clamp(34px,9vw,80px);
+    text-align:center;
+    margin-top:30px;
+    padding:0 15px;
+    letter-spacing:2px;
+    line-height:1.2;
+    color:#ffffff;
+
+    text-shadow:
+        0 0 10px #ffffff,
+        0 0 25px #22c55e,
+        0 0 45px #3b82f6;
+
+    animation:brilloAmor 3s ease-in-out infinite;
+}
+
+@keyframes brilloAmor{
+    0%,100%{transform:scale(1);opacity:1;}
+    50%{transform:scale(1.06);opacity:.9;}
 }
 
 /* ===== OBJETOS FUTBOL ===== */
@@ -231,6 +254,11 @@ button:active{
 <div class="pantalla" id="pantallaTimer">
 <h2>Tiempo de discusión</h2>
 <div id="timer">05:00</div>
+
+<div id="mensajeAmor">
+AMBAR SOS EL AMOR DE MI VIDA ❤️
+</div>
+
 </div>
 
 <script>
@@ -252,25 +280,18 @@ let roles=[];
 let nombres=[];
 let yaVieron=[];
 
-/* ===== CAMBIO PANTALLAS ===== */
-
 function cambiarPantalla(a,b){
 document.getElementById(a).classList.remove("activa");
 document.getElementById(b).classList.add("activa");
 }
 
-/* ===== NOMBRES ===== */
-
 function crearInputsNombres(){
 cantidadJugadores=parseInt(numJugadores.value);
 nombresContainer.innerHTML="<h3>Nombres:</h3>";
-
 for(let i=0;i<cantidadJugadores;i++){
 nombresContainer.innerHTML+=`<input placeholder="Jugador ${i+1}" id="nombre${i}">`;
 }
 }
-
-/* ===== LOGICA ===== */
 
 function elegirPalabra(){
 const lista=categorias[categoriaElegida];
@@ -279,7 +300,6 @@ palabraSecreta=lista[Math.floor(Math.random()*lista.length)];
 
 function asignarRoles(){
 roles=new Array(cantidadJugadores).fill("jugador");
-
 let asignados=0;
 while(asignados<cantidadImpostores){
 let r=Math.floor(Math.random()*cantidadJugadores);
@@ -326,8 +346,6 @@ crearBotonesJugadores();
 cambiarPantalla("configuracion","pantallaJuego");
 }
 
-/* ===== ROL ===== */
-
 function mostrarRol(indice,boton){
 
 if(yaVieron[indice]) return;
@@ -339,7 +357,6 @@ roles[indice]==="impostor"
 
 yaVieron[indice]=true;
 boton.style.visibility="hidden";
-
 pantallaRol.style.display="flex";
 
 if(yaVieron.every(v=>v)){
@@ -351,32 +368,24 @@ function cerrarRol(){
 pantallaRol.style.display="none";
 }
 
-/* ===== ANIMACION OBJETOS ===== */
+/* lluvia futbol */
 
 function iniciarLluviaFutbol(){
-
 const iconos=["⚽","👟","⚡"];
-
 setInterval(()=>{
 const obj=document.createElement("div");
 obj.className="objetoFutbol";
 obj.textContent=iconos[Math.floor(Math.random()*iconos.length)];
 obj.style.left=Math.random()*100+"vw";
 obj.style.animationDuration=(4+Math.random()*4)+"s";
-
 pantallaTimer.appendChild(obj);
-
 setTimeout(()=>obj.remove(),8000);
 },500);
-
 }
-
-/* ===== TIMER ===== */
 
 function empezarRonda(){
 
 cambiarPantalla("pantallaJuego","pantallaTimer");
-
 iniciarLluviaFutbol();
 
 let tiempo=300;
@@ -386,7 +395,7 @@ const intervalo=setInterval(()=>{
 let min=Math.floor(tiempo/60);
 let seg=tiempo%60;
 
-timer.textContent=
+timer.textContent =
 String(min).padStart(2,"0")+":"+
 String(seg).padStart(2,"0");
 
@@ -408,6 +417,4 @@ timer.textContent="⏰ Tiempo terminado";
 
 </body>
 </html>
-
-
 
