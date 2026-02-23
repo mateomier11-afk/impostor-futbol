@@ -4,7 +4,6 @@
 
 <meta charset="UTF-8">
 
-<!-- CONFIG MOVIL -->
 <meta name="viewport"
 content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -17,9 +16,9 @@ content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 /* ===== APP MOBILE BASE ===== */
 
 html,body{
-   min-height: 100vh;
+    min-height:100vh;
     margin:0;
-    overflow-y: auto;
+    overflow-y:auto;
     touch-action:manipulation;
     font-family:Arial, Helvetica, sans-serif;
     background:#0f172a;
@@ -142,18 +141,61 @@ button:active{
     animation:revelarRol .4s ease;
 }
 
-/* ===== TIMER ===== */
+/* =====================================================
+   🔥 PANTALLA TIMER — FONDO ANIMADO PRO
+===================================================== */
 
-#timer{
-    font-size:52px;
-    margin-top:20px;
-    color:#22c55e;
-    animation:pulse 1s infinite;
+#pantallaTimer{
+    position:relative;
+    overflow:hidden;
 }
 
-@keyframes pulse{
+/* fondo dinámico */
+#pantallaTimer::before{
+    content:"";
+    position:absolute;
+    width:300%;
+    height:300%;
+    top:-100%;
+    left:-100%;
+    background:
+        radial-gradient(circle at 20% 30%, #22c55e55, transparent 40%),
+        radial-gradient(circle at 80% 70%, #3b82f655, transparent 40%),
+        radial-gradient(circle at 50% 50%, #16a34a55, transparent 40%);
+    animation:fondoMovimiento 18s linear infinite;
+    z-index:0;
+}
+
+@keyframes fondoMovimiento{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+#pantallaTimer > *{
+    position:relative;
+    z-index:2;
+}
+
+/* ===== TIMER PRO ===== */
+
+#timer{
+    font-size:70px;
+    font-weight:bold;
+    margin-top:25px;
+    color:#22c55e;
+    letter-spacing:4px;
+
+    text-shadow:
+        0 0 10px #22c55e,
+        0 0 20px #22c55e,
+        0 0 40px #16a34a;
+
+    animation:pulseTimer 1s ease-in-out infinite;
+}
+
+@keyframes pulseTimer{
     0%{transform:scale(1);}
-    50%{transform:scale(1.05);}
+    50%{transform:scale(1.08);}
     100%{transform:scale(1);}
 }
 
@@ -176,8 +218,8 @@ button:active{
 <option value="selecciones">Adivinar Selección</option>
 </select>
 
-<input type="number" id="numJugadores" value="4" min="3" max="12" placeholder="Jugadores">
-<input type="number" id="numImpostores" value="1" min="1" placeholder="Impostores">
+<input type="number" id="numJugadores" value="4" min="3" max="12">
+<input type="number" id="numImpostores" value="1" min="1">
 
 <button onclick="crearInputsNombres()">Configurar nombres</button>
 
@@ -307,10 +349,6 @@ function mostrarRol(indice,boton){
 
     if(yaVieron[indice]) return;
 
-    textoRol.style.animation="none";
-    textoRol.offsetHeight;
-    textoRol.style.animation=null;
-
     textoRol.innerHTML =
         roles[indice]==="impostor"
         ? "🤫 SOS EL IMPOSTOR"
@@ -339,12 +377,24 @@ function empezarRonda(){
     let tiempo=300;
 
     const intervalo=setInterval(()=>{
+
         let min=Math.floor(tiempo/60);
         let seg=tiempo%60;
 
-        timer.textContent=
+        timer.textContent =
             String(min).padStart(2,"0")+":"+
             String(seg).padStart(2,"0");
+
+        /* 🔥 modo tensión */
+        if(tiempo<=30){
+            timer.style.color="#ef4444";
+            timer.style.textShadow="0 0 15px #ef4444,0 0 35px #ef4444";
+        }
+
+        /* vibración final */
+        if(tiempo<=10 && navigator.vibrate){
+            navigator.vibrate(80);
+        }
 
         tiempo--;
 
@@ -356,11 +406,11 @@ function empezarRonda(){
     },1000);
 }
 
-/* Truco fullscreen mobile */
 window.scrollTo(0,1);
 
 </script>
 
 </body>
 </html>
+
 
